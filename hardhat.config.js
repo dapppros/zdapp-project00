@@ -1,8 +1,11 @@
 require("@nomiclabs/hardhat-waffle");
 require("dotenv").config();
 
-// This is a sample Hardhat task. To learn how to create your own go to
-// https://hardhat.org/guides/create-task.html
+console.log("Infura API Key:", process.env.INFURA_API_KEY);
+console.log("Private Keys:", process.env.PRIVATE_KEYS);
+
+const privateKeys = process.env.PRIVATE_KEYS ? process.env.PRIVATE_KEYS.split(",") : [];
+
 task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
   const accounts = await hre.ethers.getSigners();
 
@@ -11,15 +14,16 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
   }
 });
 
-// You need to export an object to set up your config
-// Go to https://hardhat.org/config/ to learn more
-
 /**
  * @type import('hardhat/config').HardhatUserConfig
  */
 module.exports = {
   solidity: "0.8.9",
   networks: {
-    localhost: {}
+    localhost: {},
+    sepolia: {
+      url: `https://sepolia.infura.io/v3/${process.env.INFURA_API_KEY}`,
+      accounts: privateKeys
+    }
   },
 };
